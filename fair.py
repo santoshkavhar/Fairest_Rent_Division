@@ -35,15 +35,16 @@ def solve_mwbm(nodes, wt):
 
     prob += lpSum(max_prob), "Total_weight"
     
-    for u in nodes:
-        for v in nodes:
-            u_capacity_prob = []
-            v_capacity_prob = []
-            for w in nodes:
-                u_capacity_prob.append(choices[u][w])
-                v_capacity_prob.append(choices[w][u])
-            prob += lpSum(u_capacity_prob) <= 1, ""
-            prob += lpSum(v_capacity_prob) <= 1, ""
+    for i in nodes:
+        u_capacity_prob = []
+        v_capacity_prob = []
+        for j in nodes:
+            # row wise constraint
+            u_capacity_prob.append(choices[i][j])
+            # column wise constraint
+            v_capacity_prob.append(choices[j][i])
+        prob += lpSum(u_capacity_prob) <= 1, ""
+        prob += lpSum(v_capacity_prob) <= 1, ""
 
     print(prob)
     

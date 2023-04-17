@@ -10,7 +10,7 @@ def get_input_nodes():
     return(nodes)
     
 
-def get_input_weights():
+def get_input_weights(nodes):
     wt = {}
     for u in nodes:
         wt[u] = {}
@@ -57,5 +57,5 @@ def solve_mwbm(nodes, wt):
 
 
 nodes = get_input_nodes()
-wt= get_input_weights()
+wt= get_input_weights(nodes)
 solve_mwbm(nodes, wt)

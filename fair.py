@@ -15,7 +15,7 @@ def get_input_weights(nodes):
     for u in nodes:
         wt[u] = {}
         for v in nodes:
-            wt[u][v] = int(input("Enter the rent preferance by student "+ str(u)+ " for room "+ str(v) +" : "))
+            wt[u][v] = int(input("Enter the rent preference by student "+ str(u)+ " for room "+ str(v) +" : "))
     return(wt)
 
     

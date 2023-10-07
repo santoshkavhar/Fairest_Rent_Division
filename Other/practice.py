@@ -1,6 +1,9 @@
 import pulp
 import random
 
+room_list = []
+agent_list = []
+
 def maximinUtility(file_name):
     with open(file_name, 'r') as file:
         n = int(file.readline())
@@ -13,8 +16,10 @@ def maximinUtility(file_name):
             tokens = file.readline().split()
             agent_id = tokens[0]
             agent_set.add(agent_id)
+            agent_list.append(agent_id)
             room_id = tokens[1]
             room_set.add(room_id)
+            room_list.append(room_id)
             value = int(float(tokens[2]))
             if agent_id not in values:
                 values[agent_id] = {}
@@ -85,24 +90,17 @@ def maximinPrices(values, agent_set, room_set, assignment, rent, nonnegative_pri
     # Ensure prices sum to rent
     prob += pulp.lpSum(price_variables[r] for r in room_set) == rent
 
+    #print(agent_set, values, assignment)
     # Ensure envy-free
-    for i in agent_set:
-        for j in agent_set:
+    for i in agent_list:
+        for j in room_list:
             if i == j:
                 continue
-            prob += price_variables[assignment[i]] - price_variables[assignment[j]] >= values[i][assignment[j]] - values[i][assignment[i]]
+            prob += price_variables[j] - price_variables[assignment[i]] >= values[i][j] - values[i][assignment[i]]
 
-    # Bound minimum utility
-    #for i in agent_set:
-       # prob += price_variables[assignment[i]] + min_utility >= values[i][assignment[i]]
-        # Bound minimim utility
-       # prob += min_utility >= values[i][assignment[i]] - (1 - price_variables[assignment[i]]) * float('inf')
     # Bound minimum utility
     for i in agent_set:
         prob += min_utility >= values[i][assignment[i]] - price_variables[assignment[i]]
-
-    #prob.solve()
-
 
     try:
         print(prob)

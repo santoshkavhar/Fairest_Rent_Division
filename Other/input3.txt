@@ -1,0 +1,12 @@
+3
+6000
+Agent1 Room1 854
+Agent1 Room2 2403
+Agent1 Room3 2743
+Agent2 Room1 1082
+Agent2 Room2 2010
+Agent2 Room3 2908
+Agent3 Room1 1721
+Agent3 Room2 2124
+Agent3 Room3 2154
+

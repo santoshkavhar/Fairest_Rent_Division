@@ -26,7 +26,7 @@ def solve_mwbm(nodes, wt):
     prob = LpProblem("MWBM_Problem", LpMaximize)
 
     #Create the decision variables
-    choices = LpVariable.dicts("edge", (nodes, nodes), 0, 1, LpInteger)
+    choices = LpVariable.dicts("edge", (nodes, nodes), 0, 1)
 
     max_prob = []
     for u in nodes:

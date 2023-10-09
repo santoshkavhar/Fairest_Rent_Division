@@ -16,34 +16,6 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/api', methods=['GET','POST'])
-@cross_origin()
-def calculate_rent():
-    data = request.get_json()
-    # TODO: Use below variables
-    renters = data.get('renters', [])
-    rooms = data.get('rooms', [])
-    rents = [5, 7, 8]  # You can replace this with your own logic to calculate rents
-    # TODO: Add this
-    # nodes = get_input_nodes()
-    # wt= get_input_weights(nodes)
-    # file_name = createFile(nodes, wt)
-    # maximinUtility(file_name)
-    response = {
-        'file_name': file_name,
-        'renters': [2,1,3],
-        'rooms': [2,3,1],
-        'rents': rents
-    }
-
-    return jsonify(response)
-
-if __name__ == '__main__':
-    if len( sys.argv ) > 1:
-        file_name = sys.argv[1]  # Local file
-    else:
-        # Run web server
-        app.run(host='127.0.0.1', port=5000)  # Change the host and port as needed
 
 
 def get_input_nodes():
@@ -149,11 +121,17 @@ def maximinUtility(file_name):
         #if prices is None:
         print("failure")
         return
-
+    ass_renters_list = []
+    ass_room_list = []
+    ass_rents_list = []
     for agent in agent_set:
         room = allocation[agent]
         price = prices[room]
+        ass_room_list.append(room)
+        ass_renters_list.append(agent)
+        ass_rents_list.append(price)
         print(f"{agent} {room} {price}")
+    return ass_room_list, ass_renters_list, ass_rents_list
 
 
 def welfareMaximize(values, agent_set, room_set):
@@ -242,3 +220,46 @@ def maximinPrices(values, agent_set, room_set, assignment, rent, nonnegative_pri
 #         wt= get_input_weights(nodes)
 #         file_name = createFile(nodes, wt)
 #     maximinUtility(file_name)
+
+def convert_rent_data(rent_data):
+    wt = {}
+    for i, sublist in enumerate(rent_data, start=1):
+        wt[i] = {}
+        for j, value in enumerate(sublist, start=1):
+            wt[i][j] = value
+    return wt
+
+@app.route('/api', methods=['GET','POST'])
+@cross_origin()
+def calculate_rent():
+    data = request.get_json()
+    # TODO: Use below variables
+    num_renters = data.get('renters', 0)
+    num_rooms = data.get('rooms', 0)
+    rent_data = data.get('tableData', [[]])
+    print(num_rooms, num_renters, rent_data)
+    renters_list = list(range(1, num_renters+1))
+    rooms_list = list(range(1, num_rooms+1))
+    rents = [5, 7, 8]  # You can replace this with your own logic to calculate rents
+    # TODO: Add this
+    # nodes = get_input_nodes()
+    # wt= get_input_weights(nodes)
+    wt = convert_rent_data(rent_data)
+    file_name = createFile(renters_list, wt)
+    rooms_list, renters_list, rents = maximinUtility(file_name)
+    # TODO: Get assignment data
+    response = {
+        'file_name': file_name,
+        'renters': renters_list,
+        'rooms': rooms_list,
+        'rents': rents
+    }
+
+    return jsonify(response)
+
+if __name__ == '__main__':
+    if len( sys.argv ) > 1:
+        file_name = sys.argv[1]  # Local file
+    else:
+        # Run web server
+        app.run(host='127.0.0.1', port=5000)  # Change the host and port as needed

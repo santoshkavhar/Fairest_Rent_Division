@@ -1,12 +1,9 @@
+from sys import argv
 from api import *
-import argparse
 
 if __name__ == '__main__':
     #If input flag exists then take input from user
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-input', action='store_true')
-    options = parser.parse_args()
-    if options.input:
+    if '-input' in sys.argv:
         terminal_mode()
     # If file is input then work on file
     elif len( sys.argv ) > 1:

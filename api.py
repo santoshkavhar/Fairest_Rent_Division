@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from helper import *
 from fair import *
+from inputs import *
 
 room_list = []
 agent_list = []
@@ -26,9 +27,8 @@ def calculate_rent():
     renters_list = list(range(1, num_renters+1))
     rooms_list = list(range(1, num_rooms+1))
     wt = convert_rent_data(rent_data)
-    file_name = createFile(renters_list, wt)
-    rooms_list, renters_list, rents = maximinUtility(file_name)
-    # TODO: Get assignment data
+    file_name = create_file(renters_list, wt)
+    rooms_list, renters_list, rents = maximin_utility(file_name)
     response = {
         'file_name': file_name,
         'renters': renters_list,
@@ -39,11 +39,4 @@ def calculate_rent():
     return jsonify(response)
 
 def run():
-    # TODO: If input flag exists then take input from user
-
-    if len( sys.argv ) > 1:
-        file_name = sys.argv[1]  # Run from Local file
-        maximinUtility(file_name)
-    else:
-        # Run web server
-        app.run(host='127.0.0.1', port=5000)
+    app.run(host='127.0.0.1', port=5000)

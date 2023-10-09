@@ -1,12 +1,50 @@
 from pulp import *
+from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
+
 import sys
 import random
 import string
 
-
 room_list = []
 agent_list = []
 assignment = {}
+# Default file
+file_name="Other/input3.txt"
+
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+@app.route('/api', methods=['GET','POST'])
+@cross_origin()
+def calculate_rent():
+    data = request.get_json()
+    # TODO: Use below variables
+    renters = data.get('renters', [])
+    rooms = data.get('rooms', [])
+    rents = [5, 7, 8]  # You can replace this with your own logic to calculate rents
+    # TODO: Add this
+    # nodes = get_input_nodes()
+    # wt= get_input_weights(nodes)
+    # file_name = createFile(nodes, wt)
+    # maximinUtility(file_name)
+    response = {
+        'file_name': file_name,
+        'renters': [2,1,3],
+        'rooms': [2,3,1],
+        'rents': rents
+    }
+
+    return jsonify(response)
+
+if __name__ == '__main__':
+    if len( sys.argv ) > 1:
+        file_name = sys.argv[1]  # Local file
+    else:
+        # Run web server
+        app.run(host='127.0.0.1', port=5000)  # Change the host and port as needed
+
 
 def get_input_nodes():
     nodes = []
@@ -194,13 +232,13 @@ def maximinPrices(values, agent_set, room_set, assignment, rent, nonnegative_pri
     return None
 
 
-if __name__ == "__main__":
-    # Default file
-    file_name="Other/input3.txt"
-    if len( sys.argv ) > 1:
-        file_name = sys.argv[1]
-    else:
-        nodes = get_input_nodes()
-        wt= get_input_weights(nodes)
-        file_name = createFile(nodes, wt)
-    maximinUtility(file_name)
+# if __name__ == "__main__":
+#     # Default file
+#     file_name="Other/input3.txt"
+#     if len( sys.argv ) > 1:
+#         file_name = sys.argv[1]
+#     else:
+#         nodes = get_input_nodes()
+#         wt= get_input_weights(nodes)
+#         file_name = createFile(nodes, wt)
+#     maximinUtility(file_name)

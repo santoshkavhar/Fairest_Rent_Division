@@ -6,7 +6,7 @@ assignment = {}
 # Default file
 file_name="Other/input3.txt"
 
-def maximinUtility(file_name):
+def maximin_utility(file_name):
     with open(file_name, 'r') as file:
         n = int(file.readline())
         rent = int(file.readline())
@@ -28,10 +28,10 @@ def maximinUtility(file_name):
             values[agent_id][room_id] = value
 
     # First, find a welfare-maximizing allocation
-    allocation = welfareMaximize(values, agent_set, room_set)
+    allocation = welfare_maximize(values, agent_set, room_set)
 
     # Now, find nonnegative price vector if possible
-    prices = maximinPrices(values, agent_set, room_set, allocation, rent, True)
+    prices = maximin_prices(values, agent_set, room_set, allocation, rent, True)
     if prices is None:
         #prices = maximinPrices(values, agent_set, room_set, allocation, rent, False)
         #if prices is None:
@@ -40,7 +40,7 @@ def maximinUtility(file_name):
     ass_renters_list = []
     ass_room_list = []
     ass_rents_list = []
-    for agent in agent_set:
+    for agent in sorted(agent_set):
         room = allocation[agent]
         price = prices[room]
         ass_room_list.append(room)
@@ -50,7 +50,7 @@ def maximinUtility(file_name):
     return ass_room_list, ass_renters_list, ass_rents_list
 
 
-def welfareMaximize(values, agent_set, room_set):
+def welfare_maximize(values, agent_set, room_set):
     prob = LpProblem("WelfareMaximization", LpMaximize)
     variables = {}
     for a in agent_set:
@@ -82,7 +82,7 @@ def welfareMaximize(values, agent_set, room_set):
     return assignment
 
 
-def maximinPrices(values, agent_set, room_set, assignment, rent, nonnegative_prices):
+def maximin_prices(values, agent_set, room_set, assignment, rent, nonnegative_prices):
     prob = LpProblem("MaximinPrices", LpMinimize)
     price_variables = {}
     for r in room_set:

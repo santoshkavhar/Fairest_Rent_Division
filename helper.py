@@ -9,7 +9,7 @@ def convert_rent_data(rent_data):
             wt[i][j] = value
     return wt
 
-def createFile(nodes, wt):
+def create_file(nodes, wt):
     # 16 random letters input file to be created
     res = "Inputs/input_" + ''.join(random.choices(string.ascii_lowercase, k=16)) + ".txt"
     f = open(res, "w")

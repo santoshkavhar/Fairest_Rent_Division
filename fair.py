@@ -1,10 +1,4 @@
 from pulp import *
-from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
-
-import sys
-import random
-import string
 
 room_list = []
 agent_list = []
@@ -12,30 +6,6 @@ assignment = {}
 # Default file
 file_name="Other/input3.txt"
 
-app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
-
-
-
-def get_input_nodes():
-    nodes = []
-    num_nodes = int(input("Enter number of students or rooms: "))
-    for i in range(num_nodes):
-        # nodes will start from 1
-        nodes.append(i+1)
-    return(nodes)
-    
-
-def get_input_weights(nodes):
-    wt = {}
-    for u in nodes:
-        wt[u] = {}
-        for v in nodes:
-            wt[u][v] = int(input("Enter the preffered rent by student "+ str(u)+ " for room "+ str(v) +" : "))
-    return(wt)
-
-    
 
 def solve_mwbm(nodes, wt):
 # A Wrapper func that uses pulp to formulate and solve a MWBM
@@ -72,23 +42,6 @@ def solve_mwbm(nodes, wt):
         print(v.name, " = ", v.varValue )
     print("Sum of wts of selected edges= ", value(prob.objective))
 
-def createFile(nodes, wt):
-    # 16 random letters input file to be created
-    res = "Inputs/input_" + ''.join(random.choices(string.ascii_lowercase, k=16)) + ".txt"
-    f = open(res, "w")
-    # We can get number of nodes as the first line
-    f.write(str(len(nodes))+"\n")
-    rent = 0
-    print(wt)
-    # Second line will be the sum of rent of all rooms for any agent, consider first agent
-    for i in nodes:
-        rent += wt[1][i]
-    f.write(str(rent) + "\n")
-    for i in nodes:
-        for j in nodes:
-            f.write(str(i) + " " + str(j) + " " + str(wt[i][j])+"\n")
-    f.close()
-    return res
 
 def maximinUtility(file_name):
     with open(file_name, 'r') as file:
@@ -208,58 +161,3 @@ def maximinPrices(values, agent_set, room_set, assignment, rent, nonnegative_pri
             prices[room] = price_variables[room].value()
         return prices
     return None
-
-
-# if __name__ == "__main__":
-#     # Default file
-#     file_name="Other/input3.txt"
-#     if len( sys.argv ) > 1:
-#         file_name = sys.argv[1]
-#     else:
-#         nodes = get_input_nodes()
-#         wt= get_input_weights(nodes)
-#         file_name = createFile(nodes, wt)
-#     maximinUtility(file_name)
-
-def convert_rent_data(rent_data):
-    wt = {}
-    for i, sublist in enumerate(rent_data, start=1):
-        wt[i] = {}
-        for j, value in enumerate(sublist, start=1):
-            wt[i][j] = value
-    return wt
-
-@app.route('/api', methods=['GET','POST'])
-@cross_origin()
-def calculate_rent():
-    data = request.get_json()
-    # TODO: Use below variables
-    num_renters = data.get('renters', 0)
-    num_rooms = data.get('rooms', 0)
-    rent_data = data.get('tableData', [[]])
-    print(num_rooms, num_renters, rent_data)
-    renters_list = list(range(1, num_renters+1))
-    rooms_list = list(range(1, num_rooms+1))
-    rents = [5, 7, 8]  # You can replace this with your own logic to calculate rents
-    # TODO: Add this
-    # nodes = get_input_nodes()
-    # wt= get_input_weights(nodes)
-    wt = convert_rent_data(rent_data)
-    file_name = createFile(renters_list, wt)
-    rooms_list, renters_list, rents = maximinUtility(file_name)
-    # TODO: Get assignment data
-    response = {
-        'file_name': file_name,
-        'renters': renters_list,
-        'rooms': rooms_list,
-        'rents': rents
-    }
-
-    return jsonify(response)
-
-if __name__ == '__main__':
-    if len( sys.argv ) > 1:
-        file_name = sys.argv[1]  # Local file
-    else:
-        # Run web server
-        app.run(host='127.0.0.1', port=5000)  # Change the host and port as needed

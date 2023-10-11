@@ -1,5 +1,6 @@
 import random
 import string
+import time
 
 def convert_rent_data(rent_data):
     wt = {}
@@ -11,7 +12,7 @@ def convert_rent_data(rent_data):
 
 def create_file(nodes, wt):
     # 16 random letters input file to be created
-    res = "Inputs/input_" + ''.join(random.choices(string.ascii_lowercase, k=16)) + ".txt"
+    res = "Inputs/input_" + str(int(time.time()))+ ''.join(random.choices(string.ascii_lowercase, k=6)) + ".txt"
     f = open(res, "w")
     # We can get number of nodes as the first line
     f.write(str(len(nodes))+"\n")

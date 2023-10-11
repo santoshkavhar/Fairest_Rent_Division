@@ -79,15 +79,17 @@ def welfare_maximize(values, agent_set, room_set):
         for r in room_set:
             if variables[a][r].value() == 1:
                 assignment[a] = r
+    # print(assignment)
     return assignment
 
 
 def maximin_prices(values, agent_set, room_set, assignment, rent, nonnegative_prices):
     prob = LpProblem("MaximinPrices", LpMinimize)
     price_variables = {}
+    rev_assignment = {y: x for x, y in assignment.items()}
     for r in room_set:
         if nonnegative_prices:
-            price_variables[r] = LpVariable(f"p_{r}", 0, rent)
+            price_variables[r] = LpVariable(f"p_{r}", 0, values[rev_assignment[r]][r])
         else:
             price_variables[r] = LpVariable(f"p_{r}", 0)
 

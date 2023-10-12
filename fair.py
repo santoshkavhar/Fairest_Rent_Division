@@ -104,8 +104,8 @@ def maximin_prices(values, agent_set, room_set, assignment, rent, nonnegative_pr
     # Ensure envy-free
     for i in agent_list:
         for j in room_list:
-            if i == j:
-                continue
+            # if i == j:
+            #     continue
             prob += price_variables[j] - price_variables[assignment[i]] >= values[i][j] - values[i][assignment[i]]
 
     # Bound minimum utility

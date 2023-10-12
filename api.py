@@ -28,7 +28,11 @@ def calculate_rent():
     rooms_list = list(range(1, num_rooms+1))
     wt = convert_rent_data(rent_data)
     file_name = create_file(renters_list, wt)
-    rooms_list, renters_list, rents = maximin_utility(file_name)
+    
+    ret_value = maximin_utility(file_name)
+    if ret_value is None:
+        return jsonify({'file_name': file_name, 'error':'Validation failed!'})
+    rooms_list, renters_list, rents = ret_value
     response = {
         'file_name': file_name,
         'renters': renters_list,

@@ -1,5 +1,6 @@
 from pulp import *
 from test import *
+from validation import *
 
 room_list = []
 agent_list = []
@@ -29,6 +30,12 @@ def maximin_utility(file_name):
             if agent_id not in values:
                 values[agent_id] = {}
             values[agent_id][room_id] = value
+
+    # TODO: Check for row wise sum is same for all the rows and that none is below 0
+    if not validate_values(values):
+        print("Error in Validation! Check for equal sum and negative values.")
+        return None
+
 
     # First, find a welfare-maximizing allocation
     allocation = welfare_maximize(values, agent_set, room_set)

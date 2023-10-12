@@ -1,14 +1,11 @@
 
 def test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, values):
-    # agent_dict = {v: k for v, k in enumerate(ass_renters_list)}
-    # room_dict = {v: k for v, k in enumerate(ass_room_list)}
-    rent_dict_renter = {str(v+1): k for v, k in enumerate(ass_rents_list)}
-    rent_dict_room = {}
+
+    rent_dict_renter = {}
     counter = 0
     for i in ass_room_list:
         rent_dict_renter[i]=ass_rents_list[counter]
         counter += 1
-    # rent_dict_renter = {str(v+1): k for v, k in enumerate(ass_rents_list)}
     
     print("Allocation:", allocation, "\nValues:", values, "\nRents: ", rent_dict_renter)
     for i in ass_renters_list:

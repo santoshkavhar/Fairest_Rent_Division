@@ -13,6 +13,6 @@ def test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, v
             if  values[i][allocation[i]] - rent_dict_renter[allocation[i]] < values[i][j] - rent_dict_renter[j] :
                 print("Envyness found: " , "\tRenter no. " , i , "Allocated room no. " , allocation[i] ,
                       "\nRenter envies allocation of room no. ", j, ".",
-                      "Found utility as " , values[i][allocation[i]] - rent_dict_renter[i] ,
+                      "Found utility as " , values[i][allocation[i]] - rent_dict_renter[allocation[i]] ,
                       " which is less than the utility " , values[i][j] - rent_dict_renter[j],
                       "\n", values[i][allocation[i]] , "-", rent_dict_renter[allocation[i]], "<", values[i][j], "-", rent_dict_renter[j] )

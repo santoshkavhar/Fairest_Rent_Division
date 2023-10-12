@@ -1,4 +1,5 @@
 from pulp import *
+from test import *
 
 room_list = []
 agent_list = []
@@ -13,6 +14,8 @@ def maximin_utility(file_name):
         values = {}
         agent_set = set()
         room_set = set()
+        room_list.clear()
+        agent_list.clear()
 
         for _ in range(n * n):
             tokens = file.readline().split()
@@ -47,6 +50,9 @@ def maximin_utility(file_name):
         ass_renters_list.append(agent)
         ass_rents_list.append(price)
         print(f"{agent} {room} {price}")
+
+    test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, values)
+
     return ass_room_list, ass_renters_list, ass_rents_list
 
 

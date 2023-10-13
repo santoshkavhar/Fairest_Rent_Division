@@ -41,7 +41,7 @@ def maximin_utility(file_name):
     allocation = welfare_maximize(values, agent_set, room_set)
 
     # Now, find nonnegative price vector if possible
-    prices = maximin_prices(values, agent_set, room_set, allocation, rent, True)
+    prices = maximin_prices(values, agent_set, room_set, allocation, rent)
     if prices is None:
         #prices = maximinPrices(values, agent_set, room_set, allocation, rent, False)
         #if prices is None:
@@ -96,15 +96,12 @@ def welfare_maximize(values, agent_set, room_set):
     return assignment
 
 
-def maximin_prices(values, agent_set, room_set, assignment, rent, nonnegative_prices):
+def maximin_prices(values, agent_set, room_set, assignment, rent):
     prob = LpProblem("MaximinPrices", LpMinimize)
     price_variables = {}
     rev_assignment = {y: x for x, y in assignment.items()}
     for r in room_set:
-        if nonnegative_prices:
-            price_variables[r] = LpVariable(f"p_{r}", -1 * rent , values[rev_assignment[r]][r])
-        else:
-            price_variables[r] = LpVariable(f"p_{r}", 0)
+        price_variables[r] = LpVariable(f"p_{r}", -1 * rent , values[rev_assignment[r]][r])
 
     # Objective is maximize minimum utility (or minimize negative of minimum utility)
     min_utility = LpVariable("y", 0)

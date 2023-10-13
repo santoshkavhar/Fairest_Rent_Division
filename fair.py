@@ -92,15 +92,17 @@ def welfare_maximize(values, agent_set, room_set):
         for r in room_set:
             if variables[a][r].value() == 1:
                 assignment[a] = r
+    # print(assignment)
     return assignment
 
 
 def maximin_prices(values, agent_set, room_set, assignment, rent, nonnegative_prices):
     prob = LpProblem("MaximinPrices", LpMinimize)
     price_variables = {}
+    rev_assignment = {y: x for x, y in assignment.items()}
     for r in room_set:
         if nonnegative_prices:
-            price_variables[r] = LpVariable(f"p_{r}", 0, rent)
+            price_variables[r] = LpVariable(f"p_{r}", -1 * rent , values[rev_assignment[r]][r])
         else:
             price_variables[r] = LpVariable(f"p_{r}", 0)
 
@@ -115,8 +117,8 @@ def maximin_prices(values, agent_set, room_set, assignment, rent, nonnegative_pr
     # Ensure envy-free
     for i in agent_list:
         for j in room_list:
-            if i == j:
-                continue
+            # if i == j:
+            #     continue
             prob += price_variables[j] - price_variables[assignment[i]] >= values[i][j] - values[i][assignment[i]]
 
     # Bound minimum utility

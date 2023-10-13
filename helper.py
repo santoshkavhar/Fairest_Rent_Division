@@ -1,6 +1,7 @@
 import random
 import string
 import time
+import csv
 
 def convert_rent_data(rent_data):
     wt = {}
@@ -27,3 +28,22 @@ def create_file(nodes, wt):
             f.write(str(i) + " " + str(j) + " " + str(wt[i][j])+"\n")
     f.close()
     return res
+
+def check_matrix(matrix):
+    for row in matrix:
+        sum = 0
+        # print(i, row)
+        for ele in row:
+            # print(j, ele)
+            sum += ele
+        print(sum)
+
+def read_csv_file(file_path):
+    matrix = []
+
+    # Read CSV data from the file into the list of lists
+    with open(file_path, 'r') as csvfile:
+        csv_reader = csv.reader(csvfile)
+        for row in csv_reader:
+            matrix.append([int(value) for value in row])
+    return matrix

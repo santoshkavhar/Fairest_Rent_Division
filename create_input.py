@@ -8,7 +8,7 @@ def correct_matrix(matrix, rent):
     for i, row in enumerate(matrix):
         sum = 0
         # print(i, row)
-        for j, ele in enumerate(row):
+        for _, ele in enumerate(row):
             # print(j, ele)
             sum += ele
         if sum < rent:
@@ -19,15 +19,29 @@ def correct_matrix(matrix, rent):
     return matrix
             
 
-def generate_csv():
+def generate_csv(matrix):
+    if matrix is None:
+        # Rent range [10,1000]
+        min_rent = 10
+        max_rent = 1000
+        min_rows = 3
+        max_rows = 10
+        # row/col length range -> [3,10]
+        return generate_random_csv(min_rent, max_rent, min_rows, max_rows)
+    
+    else:
+        return generate_csv_from_matrix(matrix)
+
+def generate_random_csv(min_rent, max_rent, min_rows, max_rows):
+
     # Change the value of n as needed
-    n = 5  # For a 5x5 matrix
+    # n = 5 For a 5x5 matrix
     # Generate n x n matrix with random integers
 
     # Random Rent range -> [10,1000]
-    rent = random.randint(10, 1000)
+    rent = random.randint(min_rent, max_rent)
     # Random square matrix row length range -> [3,10]
-    n = random.randint(3, 10)
+    n = random.randint(min_rows, max_rows)
 
     matrix = np.random.randint(0, rent+1, size=(n, n))
     
@@ -41,13 +55,22 @@ def generate_csv():
     matrix = correct_matrix(matrix, rent)
 
     # print(matrix)
+    return generate_csv_from_matrix(matrix)
+
+
+def generate_csv_from_matrix(matrix):
+
     # Write the matrix to a CSV file
-    with open('CSV_Input/in_' + str(time.time())+ "_" + ''.join(random.choices(string.ascii_lowercase, k=6)) + '.csv', 'w', newline='') as csvfile:
+    file_path = 'CSV_Input/in_' + str(time.time())+ "_" + ''.join(random.choices(string.ascii_lowercase, k=6)) + '.csv'
+    with open(file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         for row in matrix:
             writer.writerow(row)
+    return file_path
 
 
-generate_csv()
+# generate_csv()
+
+
 
 

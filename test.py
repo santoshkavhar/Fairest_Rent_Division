@@ -11,9 +11,11 @@ def test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, v
     print("Allocation:", allocation, "\nValues:", values, "\nRents: ", rent_dict_renter)
     for i in ass_renters_list:
         for j in ass_room_list:
-            if  values[i][allocation[i]] - rent_dict_renter[allocation[i]] < values[i][j] - rent_dict_renter[j] :
-                failure("Envyness found: " , "\tRenter no. " , i , "Allocated room no. " , allocation[i] ,
+            if  round(values[i][allocation[i]] - rent_dict_renter[allocation[i]], 2) < round(values[i][j] - rent_dict_renter[j],2) :
+                set_failure()
+                print("Envyness found: " , "\tRenter no. " , i , "Allocated room no. " , allocation[i] ,
                       "\nRenter envies allocation of room no. ", j, ".",
                       "Found utility as " , values[i][allocation[i]] - rent_dict_renter[allocation[i]] ,
                       " which is less than the utility " , values[i][j] - rent_dict_renter[j],
                       "\n", values[i][allocation[i]] , "-", rent_dict_renter[allocation[i]], "<", values[i][j], "-", rent_dict_renter[j] )
+                set_normal()

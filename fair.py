@@ -1,136 +1,136 @@
 from pulp import *
 from test import *
 from validation import *
+from helper import *
+from constants import *
 
-room_list = []
-agent_list = []
-assignment = {}
+
 # Default file
 file_name="Other/input3.txt"
 
-def maximin_utility(file_name):
-    with open(file_name, 'r') as file:
-        n = int(file.readline())
-        rent = int(file.readline())
-        values = {}
-        agent_set = set()
-        room_set = set()
-        room_list.clear()
-        agent_list.clear()
+def maximin_utility(file_path):
 
-        for _ in range(n * n):
-            tokens = file.readline().split()
-            agent_id = tokens[0]
-            agent_set.add(agent_id)
-            agent_list.append(agent_id)
-            room_id = tokens[1]
-            room_set.add(room_id)
-            room_list.append(room_id)
-            value = int(float(tokens[2]))
-            if agent_id not in values:
-                values[agent_id] = {}
-            values[agent_id][room_id] = value
-
-    # TODO: Check for row wise sum is same for all the rows and that none is below 0
-    if not validate_values(values):
-        print("Error in Validation! Check for equal sum and negative values.")
-        return None
-
-
-    # First, find a welfare-maximizing allocation
-    allocation = welfare_maximize(values, agent_set, room_set)
-
-    # Now, find nonnegative price vector if possible
-    prices = maximin_prices(values, agent_set, room_set, allocation, rent)
-    if prices is None:
-        #prices = maximinPrices(values, agent_set, room_set, allocation, rent, False)
-        #if prices is None:
-        print("failure")
-        return
     ass_renters_list = []
     ass_room_list = []
     ass_rents_list = []
-    for agent in sorted(agent_set):
+
+    values = read_preference_csv(file_path)
+    # Assumption: agent list and room list are a same set
+    agent_list = list(range(0, len(values[0])))
+    room_list = list(range(0, len(values[0])))
+
+    # failure(agent_list)
+
+    # TODO: Check for row wise sum is same for all the rows and that none is below 0
+    if not validate_values(values):
+        failure("Error in Validation! Check for equal sum of each row and negative values.")
+        return None    
+
+    # First, find a welfare-maximizing allocation
+    allocation = welfare_maximize(values, agent_list, room_list)
+
+    # Now, find envy-free rent prices
+    prices = envy_free_prices(values, agent_list, room_list, allocation)
+    if prices is None:
+        #prices = maximinPrices(values, agent_list, room_list, allocation, rent, False)
+        #if prices is None:
+        failure("Failure! Prices are None!")
+        return
+
+    for agent in sorted(agent_list):
         room = allocation[agent]
         price = prices[room]
         ass_room_list.append(room)
         ass_renters_list.append(agent)
         ass_rents_list.append(price)
-        print(f"{agent} {room} {price}")
+        success(f"{agent} {room} {price}")
 
     test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, values)
 
     return ass_room_list, ass_renters_list, ass_rents_list
 
 
-def welfare_maximize(values, agent_set, room_set):
-    prob = LpProblem("WelfareMaximization", LpMaximize)
+def welfare_maximize(values, agent_list, room_list):
+
+    allocation = {}
     variables = {}
-    for a in agent_set:
+
+    # failure(agent_list)
+    # failure(room_list) 
+    # failure(values)
+
+    prob = LpProblem("Welfare_Maximization", LpMaximize)
+    for a in agent_list:
         variables[a] = {}
-        for r in room_set:
+        for r in room_list:
             variables[a][r] = LpVariable(f"x_{a}_{r}", 0, 1, LpBinary)
 
     # Objective is total welfare
-    prob += lpSum(values[a][r] * variables[a][r] for a in agent_set for r in room_set)
+    prob += lpSum(values[a][r] * variables[a][r] for a in agent_list for r in room_list)
 
     # Each agent assigned 1 room
-    for a in agent_set:
-        prob += lpSum(variables[a][r] for r in room_set) == 1
+    for a in agent_list:
+        prob += lpSum(variables[a][r] for r in room_list) == 1
 
     # Each room assigned 1 agent
-    for r in room_set:
-        prob += lpSum(variables[a][r] for a in agent_set) == 1
+    for r in room_list:
+        prob += lpSum(variables[a][r] for a in agent_list) == 1
 
 
-    print(prob)
+    # print(prob)
     prob.solve()
 
-    # Get the assignment
-    assignment = {}
-    for a in agent_set:
-        for r in room_set:
+    # Get the allocation
+    for a in agent_list:
+        for r in room_list:
             if variables[a][r].value() == 1:
-                assignment[a] = r
-    # print(assignment)
-    return assignment
+                allocation[a] = r
+    return allocation
 
 
-def maximin_prices(values, agent_set, room_set, assignment, rent):
-    prob = LpProblem("MaximinPrices", LpMinimize)
+def envy_free_prices(values, agent_list, room_list, allocation):
+
+    prices = {}
     price_variables = {}
-    rev_assignment = {y: x for x, y in assignment.items()}
-    for r in room_set:
-        price_variables[r] = LpVariable(f"p_{r}", -1 * rent , values[rev_assignment[r]][r])
+
+    # Calculate the rent from the first row values
+    rent = calculate_rent(values[0])
+
+    prob = LpProblem("Envy_Freeness", LpMinimize)
+
+    rev_allocation = {y: x for x, y in allocation.items()}
+    for r in room_list:
+        price_variables[r] = LpVariable(f"p_{r}", -1 * rent , values[rev_allocation[r]][r])
 
     # Objective is maximize minimum utility (or minimize negative of minimum utility)
     min_utility = LpVariable("y", 0)
     prob += min_utility
 
     # Ensure prices sum to rent
-    prob += lpSum(price_variables[r] for r in room_set) == rent
+    prob += lpSum(price_variables[r] for r in room_list) == rent
 
-    #print(agent_set, values, assignment)
+    #print(agent_list, values, allocation)
     # Ensure envy-free
     for i in agent_list:
         for j in room_list:
-            prob += price_variables[j] - price_variables[assignment[i]] >= values[i][j] - values[i][assignment[i]]
+            prob += price_variables[j] - price_variables[allocation[i]] >= values[i][j] - values[i][allocation[i]]
 
     # Bound minimum utility
-    for i in agent_set:
-        prob += min_utility >= values[i][assignment[i]] - price_variables[assignment[i]]
+    for i in agent_list:
+        prob += min_utility >= values[i][allocation[i]] - price_variables[allocation[i]]
 
     try:
-        print(prob)
+        # print(prob)
         prob.solve()
     except:
-        print("Error occured!")
+        failure("Error occured! Couldn't solve the LP problem!")
         return
     
+    # print(agent_list, room_list, LpStatus[prob.status])
+
     if LpStatus[prob.status] == 'Optimal':
-        prices = {}
-        for i in agent_set:
-            room = assignment[i]
+        for i in agent_list:
+            room = allocation[i]
             prices[room] = price_variables[room].value()
         return prices
     return None

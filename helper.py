@@ -2,32 +2,16 @@ import random
 import string
 import time
 import csv
+from constants import *
 
+# To dictionary format
 def convert_rent_data(rent_data):
-    wt = {}
+    wt = []
     for i, sublist in enumerate(rent_data, start=1):
-        wt[i] = {}
+        wt[i]
         for j, value in enumerate(sublist, start=1):
             wt[i][j] = value
     return wt
-
-def create_file(nodes, wt):
-    # 16 random letters input file to be created
-    res = "Inputs/in_" + str(time.time())+ "_" + ''.join(random.choices(string.ascii_lowercase, k=6)) + ".txt"
-    f = open(res, "w")
-    # We can get number of nodes as the first line
-    f.write(str(len(nodes))+"\n")
-    rent = 0
-    print(wt)
-    # Second line will be the sum of rent of all rooms for any agent, consider first agent
-    for i in nodes:
-        rent += wt[1][i]
-    f.write(str(rent) + "\n")
-    for i in nodes:
-        for j in nodes:
-            f.write(str(i) + " " + str(j) + " " + str(wt[i][j])+"\n")
-    f.close()
-    return res
 
 def check_matrix(matrix):
     for row in matrix:
@@ -38,7 +22,7 @@ def check_matrix(matrix):
             sum += ele
         print(sum)
 
-def read_csv_file(file_path):
+def read_preference_csv(file_path):
     matrix = []
 
     # Read CSV data from the file into the list of lists
@@ -47,3 +31,19 @@ def read_csv_file(file_path):
         for row in csv_reader:
             matrix.append([int(value) for value in row])
     return matrix
+
+def calculate_rent(first_row):
+    # Only calculate for first row
+    rent = 0
+    for i in first_row:
+        rent += i
+    return rent
+
+def failure(input):
+    print(bcolors.FAIL, input, bcolors.ENDC)
+
+def warning(input):
+    print(bcolors.WARNING, input, bcolors.ENDC)
+
+def success(input):
+    print(bcolors.SUCCESS, input, bcolors.ENDC)

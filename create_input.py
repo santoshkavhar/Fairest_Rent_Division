@@ -67,10 +67,3 @@ def generate_csv_from_matrix(matrix):
         for row in matrix:
             writer.writerow(row)
     return file_path
-
-
-# generate_csv()
-
-
-
-

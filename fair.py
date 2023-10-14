@@ -4,10 +4,6 @@ from validation import *
 from helper import *
 from constants import *
 
-
-# Default file
-file_name="Other/input3.txt"
-
 def maximin_utility(file_path):
 
     ass_renters_list = []
@@ -128,7 +124,7 @@ def envy_free_prices(values, agent_list, room_list, allocation):
     
     # print(agent_list, room_list, LpStatus[prob.status])
 
-    if LpStatus[prob.status] == 'Optimal':
+    if LpStatus[prob.status] == OPTIMAL:
         for i in agent_list:
             room = allocation[i]
             prices[room] = price_variables[room].value()

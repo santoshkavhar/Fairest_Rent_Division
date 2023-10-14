@@ -6,7 +6,6 @@ from fair import *
 from inputs import *
 
 # Default file
-file_name="Other/input3.txt"
 
 app = Flask(__name__)
 cors = CORS(app)

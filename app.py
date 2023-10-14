@@ -7,8 +7,9 @@ if __name__ == '__main__':
         terminal_mode()
     # If file is input then work on file
     elif len( sys.argv ) > 1:
-        file_name = sys.argv[1]  # Run from Local file
-        maximin_utility(file_name)
+        file_path = sys.argv[1]  # Run from Local file
+        maximin_utility(file_path)
+    # TODO: Create and run random number of files for certain parameters in command line
     # Else run web server
     else:
         run()

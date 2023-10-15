@@ -5,9 +5,9 @@ from create_input import *
 def terminal_mode():
     nodes = get_input_nodes()
     wt = get_input_weights(nodes)
-    file_path = generate_csv(wt)
+    matrix = convert_to_matrix(wt)
+    file_path = generate_csv(matrix)
     maximin_utility(file_path)
-
 
 def get_input_nodes():
     nodes = []

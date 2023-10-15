@@ -10,7 +10,7 @@ if __name__ == '__main__':
     parser.add_argument('-terminal', action='store_true', help='Run terminal mode of program.')
     parser.add_argument('-file', type=str, help='Take input from a CSV file with the specified file path.', metavar='FILE_PATH')
     # Make 'folder_name' compulsory only for -create and -test flags
-    parser.add_argument('folder_name', type=str, nargs='?', help='Folder name.')
+    parser.add_argument('folder_name', type=str, help='Folder name.')
     
     args = parser.parse_args()
 

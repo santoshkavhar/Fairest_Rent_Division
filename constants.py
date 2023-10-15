@@ -10,6 +10,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 OPTIMAL = 'Optimal'
+CSV_Input = 'CSV_Input'
 
 # Rent range [10,1000]
 MIN_RENT = 10

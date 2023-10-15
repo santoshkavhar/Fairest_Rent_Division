@@ -15,19 +15,21 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 @cross_origin()
 def calculate_rent():
     data = request.get_json()
-    # TODO: Use below variables
     num_renters = data.get('renters', 0)
     num_rooms = data.get('rooms', 0)
     rent_data = data.get('rentData', [[]])
     # print(num_rooms, num_renters, rent_data)
     renters_list = list(range(1, num_renters+1))
     rooms_list = list(range(1, num_rooms+1))
-    # Rent data should be in matrix format
+    # Rent data is already in matrix format
     file_path = generate_csv(rent_data)
-    
     ret_value = maximin_utility(file_path)
     if ret_value is None:
-        return jsonify({'file_path': file_path, 'error':'Validation failed!'})
+        err_response = {
+            'file_path': file_path,
+            'error':'Validation failed!'
+        }
+        return jsonify(err_response)
     rooms_list, renters_list, rents = ret_value
 
     response = {

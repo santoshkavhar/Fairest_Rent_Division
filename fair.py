@@ -6,6 +6,8 @@ from constants import *
 
 def maximin_utility(file_path):
 
+    help('Finding utility for file: '+ file_path)
+
     ass_renters_list = []
     ass_room_list = []
     ass_rents_list = []

@@ -5,6 +5,15 @@ import string
 import os
 import time
 from constants import *
+from helper import *
+
+def create_csv_files(num_files, folder_name):
+    # Create the folder if it doesn't exist
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+    
+    for i in range(num_files):        
+        generate_csv(folder_name)
 
 def correct_matrix(matrix, rent):
     for i, row in enumerate(matrix):

@@ -1,6 +1,6 @@
 from helper import *
 from fair import *
-from create_input import *
+from create_csv import *
 
 def terminal_mode():
     nodes = get_input_nodes()

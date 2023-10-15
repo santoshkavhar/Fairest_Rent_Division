@@ -11,3 +11,9 @@ class bcolors:
 
 OPTIMAL = 'Optimal'
 
+# Rent range [10,1000]
+MIN_RENT = 10
+MAX_RENT = 1000
+MIN_ROWS = 3
+MAX_ROWS = 10
+# row/col length range -> [3,10]

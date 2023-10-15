@@ -36,10 +36,10 @@ def maximin_utility(file_path):
     for agent in sorted(agent_list):
         room = allocation[agent]
         price = prices[room]
-        ass_room_list.append(room)
-        ass_renters_list.append(agent)
+        ass_room_list.append(room+1)
+        ass_renters_list.append(agent+1)
         ass_rents_list.append(price)
-        success(f"{agent} {room} {price}")
+        success(f"{agent+1} {room+1} {price}")
 
     test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, values)
 

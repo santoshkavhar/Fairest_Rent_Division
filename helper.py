@@ -45,6 +45,9 @@ def warning(input):
 def success(input):
     print(bcolors.SUCCESS, input, bcolors.ENDC)
 
+def help(input):
+    print(bcolors.OKCYAN, input, bcolors.ENDC)
+
 def set_failure():
     print(bcolors.FAIL)
 

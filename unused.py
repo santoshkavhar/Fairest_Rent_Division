@@ -53,3 +53,8 @@ def create_file(nodes, wt):
             f.write(str(i) + " " + str(j) + " " + str(wt[i][j])+"\n")
     f.close()
     return res
+
+def check_for_folder_name():
+    if args.folder_name == '':
+            failure('Folder Name has to be passed!')
+            exit(1)

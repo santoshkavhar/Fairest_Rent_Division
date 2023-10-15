@@ -96,6 +96,8 @@ def envy_free_prices(values, agent_list, room_list, allocation):
 
     rev_allocation = {y: x for x, y in allocation.items()}
     for r in room_list:
+        # lower limit could be negative as well 
+        # If it is 0 then it is not a maximin utility solution
         price_variables[r] = LpVariable(f"p_{r}", -1 * rent , values[rev_allocation[r]][r])
 
     # Objective is maximize minimum utility (or minimize negative of minimum utility)
@@ -109,6 +111,13 @@ def envy_free_prices(values, agent_list, room_list, allocation):
     # Ensure envy-free
     for i in agent_list:
         for j in room_list:
+            # Sample Envy example:
+            # 12,0,0
+            # 12,0,0
+            # 3,5,4
+            # For envyness uncomment below 2 lines
+            # if i == j:
+            #     continue
             prob += price_variables[j] - price_variables[allocation[i]] >= values[i][j] - values[i][allocation[i]]
 
     # Bound minimum utility

@@ -14,11 +14,24 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 
 # Run
-## Run Web Server
+## Help to Run application
+python3 app.py --help 
+
+## Web Server mode
 python3 app.py
 
-## Run via Terminal as input
-python3 app.py -input
+## Terminal mode
+python3 app.py -terminal
 
-## Give Input File
-python3 app.py <file_path>
+## Input File mode
+python3 app.py -file <file_path>
+
+## Create CSV files for rent data
+python3 app.py -create <num_of_files_to_be_created> <folder_name>
+
+## Test CSV files for rent data
+python3 app.py -test <folder_name>
+
+# NOTE:
+Please start folder_name for creation of CSV files to be something like Test*, where * can be any string.
+

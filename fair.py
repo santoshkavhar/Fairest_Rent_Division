@@ -72,9 +72,18 @@ def welfare_maximize(values, agent_list, room_list):
     for r in room_list:
         prob += lpSum(variables[a][r] for a in agent_list) == 1
 
-
-    # print(prob)
-    prob.solve()
+    try:
+        # print(prob)
+        # Silence PuLP messages
+        prob.solve(PULP_CBC_CMD(msg=False))
+    except:
+        failure("Error occured! Couldn't solve the LP problem!")
+        return
+    
+    # Check the status of the solution
+    if LpStatus[prob.status] != OPTIMAL:
+        failure("Problem solving the LP!\t"+LpStatus[prob.status])
+        return
 
     # Get the allocation
     for a in agent_list:
@@ -126,16 +135,18 @@ def envy_free_prices(values, agent_list, room_list, allocation):
 
     try:
         # print(prob)
-        prob.solve()
+        prob.solve(PULP_CBC_CMD(msg=False))
     except:
         failure("Error occured! Couldn't solve the LP problem!")
         return
     
     # print(agent_list, room_list, LpStatus[prob.status])
 
-    if LpStatus[prob.status] == OPTIMAL:
-        for i in agent_list:
-            room = allocation[i]
-            prices[room] = price_variables[room].value()
-        return prices
-    return None
+    if LpStatus[prob.status] != OPTIMAL:
+        failure("Problem solving the LP!\t"+LpStatus[prob.status])
+        return None
+
+    for i in agent_list:
+        room = allocation[i]
+        prices[room] = price_variables[room].value()
+    return prices

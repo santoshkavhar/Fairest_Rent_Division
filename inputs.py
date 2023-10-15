@@ -1,11 +1,13 @@
 from helper import *
 from fair import *
+from create_csv import *
 
 def terminal_mode():
     nodes = get_input_nodes()
     wt = get_input_weights(nodes)
-    file_name = create_file(nodes, wt)
-    maximin_utility(file_name)
+    matrix = convert_to_matrix(wt)
+    file_path = generate_csv(matrix)
+    maximin_utility(file_path)
 
 def get_input_nodes():
     nodes = []

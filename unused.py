@@ -34,3 +34,27 @@ def solve_mwbm(nodes, wt):
     for v in prob.variables():
         print(v.name, " = ", v.varValue )
     print("Sum of wts of selected edges= ", value(prob.objective))
+
+
+def create_file(nodes, wt):
+    # 16 random letters input file to be created
+    res = "Inputs/in_" + str(time.time())+ "_" + ''.join(random.choices(string.ascii_lowercase, k=6)) + ".txt"
+    f = open(res, "w")
+    # We can get number of nodes as the first line
+    f.write(str(len(nodes))+"\n")
+    rent = 0
+    print(wt)
+    # Second line will be the sum of rent of all rooms for any agent, consider first agent
+    for i in nodes:
+        rent += wt[1][i]
+    f.write(str(rent) + "\n")
+    for i in nodes:
+        for j in nodes:
+            f.write(str(i) + " " + str(j) + " " + str(wt[i][j])+"\n")
+    f.close()
+    return res
+
+def check_for_folder_name():
+    if args.folder_name == '':
+            failure('Folder Name has to be passed!')
+            exit(1)

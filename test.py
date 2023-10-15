@@ -13,14 +13,15 @@ def test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, v
     for key, value in allocation.items():
         allocation_from_1[key+1]=value+1
     
-    print("Allocation:", allocation_from_1, "\nValues:", values, "\nRents: ", rent_dict_renter)
+    # print("Allocation:", allocation_from_1, "\nValues:", values, "\nRents: ", rent_dict_renter)
     for i in ass_renters_list:
         # Since i starts from 1
         i -= 1
         for j in ass_room_list:
             # Since j starts from 1
             j -= 1
-            if  round(values[i][allocation[i]] - rent_dict_renter[allocation[i]], 2) < round(values[i][j] - rent_dict_renter[j],2) :
+            # Round to ROUND decimal places
+            if  round(values[i][allocation[i]] - rent_dict_renter[allocation[i]], ROUND) < round(values[i][j] - rent_dict_renter[j], ROUND) :
                 set_failure()
                 print("Envyness found: " , "\tRenter no. " , i , "Allocated room no. " , allocation[i] ,
                       "\nRenter envies allocation of room no. ", j, ".",

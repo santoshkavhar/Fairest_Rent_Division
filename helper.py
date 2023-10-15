@@ -1,17 +1,14 @@
-import random
-import string
-import time
 import csv
 from constants import *
 
-# To dictionary format
-def convert_rent_data(rent_data):
-    wt = []
-    for i, sublist in enumerate(rent_data, start=1):
-        wt[i]
-        for j, value in enumerate(sublist, start=1):
-            wt[i][j] = value
-    return wt
+# Convert ao list of lists from a dictionary of dictionaries format
+def convert_to_matrix(rent_data):
+    matrix = []
+    for _, inner_dict in rent_data.items():
+        row = []
+        row.extend(inner_dict.values()) # Add the values from the inner dictionary
+        matrix.append(row)
+    return matrix
 
 def check_matrix(matrix):
     for row in matrix:

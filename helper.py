@@ -60,6 +60,8 @@ def success(input):
 def help(input):
     print(bcolors.OKCYAN, input, bcolors.ENDC)
 
+def set_bold():
+    print(bcolors.BOLD) 
 
 def set_failure():
     print(bcolors.FAIL)

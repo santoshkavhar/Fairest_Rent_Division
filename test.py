@@ -25,21 +25,24 @@ def test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, v
             # Round to ROUND decimal places
             if round( values[i][allocation[i]] - rent_dict_renter[allocation[i]], ROUND
             ) < round(values[i][j] - rent_dict_renter[j], ROUND):
+                
                 set_failure()
                 print(
                     "Envyness found: ",
-                    "\tRenter no. ",
-                    i,
-                    "Allocated room no. ",
-                    allocation[i],
-                    "\nRenter envies allocation of room no. ",
-                    j,
-                    ".",
-                    "Found utility as ",
+                    "\tRenter no.",
+                    i+1,
+                    "Allocated room no.",
+                    allocation[i]+1,
+                    "\nRenter envies allocation of room no.",
+                    j+1,
+                    ".Found utility as",
                     values[i][allocation[i]] - rent_dict_renter[allocation[i]],
-                    " which is less than the utility ",
-                    values[i][j] - rent_dict_renter[j],
-                    "\n",
+                    "which is less than the utility",
+                    values[i][j] - rent_dict_renter[j]
+                )
+
+                set_bold()
+                print(
                     values[i][allocation[i]],
                     "-",
                     rent_dict_renter[allocation[i]],

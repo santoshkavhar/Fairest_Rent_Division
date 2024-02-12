@@ -96,6 +96,8 @@ def generate_csv_from_matrix(matrix, folder_name):
     )
     file_path = os.path.join(f_n, file_name)
 
+    os.makedirs(f_n)
+
     with open(file_path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
         for row in matrix:

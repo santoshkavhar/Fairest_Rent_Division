@@ -96,6 +96,7 @@ def generate_csv_from_matrix(matrix, folder_name):
     )
     file_path = os.path.join(f_n, file_name)
 
+    # Create directory if not already exist
     os.makedirs(f_n, exist_ok=True)
 
     with open(file_path, "w", newline="") as csvfile:

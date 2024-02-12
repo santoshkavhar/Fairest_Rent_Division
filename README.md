@@ -35,3 +35,6 @@ python3 app.py -test <folder_name>
 # NOTE:
 Please start folder_name for creation of CSV files to be something like Test*, where * can be any string.
 
+# For Help with arguments
+python3 app.py -h
+

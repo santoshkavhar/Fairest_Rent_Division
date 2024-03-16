@@ -12,6 +12,8 @@ class bcolors:
 
 OPTIMAL = "Optimal"
 CSV_Input = "CSV_Input"
+CSV_Input_Room = "CSV_Input_Room"
+CSV_Input_Hostel = "CSV_Input_Hostel"
 
 ROUND = 2
 
@@ -21,3 +23,6 @@ MAX_RENT = 1000
 MIN_ROWS = 3
 MAX_ROWS = 10
 # row/col length range -> [3,10]
+
+ROOM_API = 0
+HOSTEL_API = 1

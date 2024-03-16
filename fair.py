@@ -16,7 +16,8 @@ def maximin_utility(file_path):
     values = read_preference_csv(file_path)
 
     # Assumption: agent list and room list are a same set
-    agent_list = list(range(0, len(values[0])))
+    # [[2, 0], [1, 1], [2, 0]]  means 3 agents and 2 rooms or floors
+    agent_list = list(range(0, len(values)))
     room_list = list(range(0, len(values[0])))
 
     # failure(agent_list)
@@ -28,7 +29,15 @@ def maximin_utility(file_path):
         return None
 
     # First, find a welfare-maximizing allocation
+    warning(values)
+    warning(agent_list)
+    warning(room_list)
     allocation = welfare_maximize(values, agent_list, room_list)
+    print("Allocation")
+    success(allocation)
+    if allocation is None:
+        failure("Error in allocation")
+        return
 
     # Now, find envy-free rent prices
     prices = envy_free_prices(values, agent_list, room_list, allocation)
@@ -73,14 +82,15 @@ def welfare_maximize(values, agent_list, room_list):
 
     # Each agent assigned 1 room
     for a in agent_list:
-        prob += lpSum(variables[a][r] for r in room_list) == 1
+        prob += lpSum(variables[a][r] for r in room_list) <= 1
 
     # Each room assigned 1 agent
+    # For floor assigned capacity agents for that floor
     for r in room_list:
-        prob += lpSum(variables[a][r] for a in agent_list) == 1
+        prob += lpSum(variables[a][r] for a in agent_list) <= 1
 
     try:
-        # print(prob)
+        print(prob)
         # Silence PuLP messages
         prob.solve(PULP_CBC_CMD(msg=False))
     except:
@@ -97,7 +107,7 @@ def welfare_maximize(values, agent_list, room_list):
         for r in room_list:
             if variables[a][r].value() == 1:
                 allocation[a] = r
-
+    success(allocation)
     return allocation
 
 
@@ -128,23 +138,23 @@ def envy_free_prices(values, agent_list, room_list, allocation):
 
     # print(agent_list, values, allocation)
     # Ensure envy-free
-    for i in agent_list:
-        for j in room_list:
+    for a in agent_list:
+        for r in room_list:
             # Sample Envy example:
             # 12,0,0
             # 12,0,0
             # 3,5,4
             # For envyness uncomment below 2 lines
-            # if i == j:
+            # if a == r:
             #     continue
             prob += (
-                price_variables[j] - price_variables[allocation[i]]
-                >= values[i][j] - values[i][allocation[i]]
+                price_variables[r] - price_variables[allocation[a]]
+                >= values[a][r] - values[a][allocation[a]]
             )
 
     # Bound minimum utility
-    for i in agent_list:
-        prob += min_utility >= values[i][allocation[i]] - price_variables[allocation[i]]
+    for a in agent_list:
+        prob += min_utility >= values[a][allocation[a]] - price_variables[allocation[a]]
 
     try:
         # print(prob)

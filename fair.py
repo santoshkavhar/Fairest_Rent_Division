@@ -38,9 +38,15 @@ def maximin_utility(file_path):
     if allocation is None:
         failure("Error in allocation")
         return
+    # Trim down the agent list
+    new_agent_list = list(allocation.keys())
+    success(new_agent_list)
+
+    new_room_list = list(allocation.values())
+    success(new_room_list)
 
     # Now, find envy-free rent prices
-    prices = envy_free_prices(values, agent_list, room_list, allocation)
+    prices = envy_free_prices(values, new_agent_list, new_room_list, allocation)
 
     if prices is None:
         # prices = maximinPrices(values, agent_list, room_list, allocation, rent, False)
@@ -48,7 +54,7 @@ def maximin_utility(file_path):
         failure("Failure! Prices are None!")
         return
 
-    for agent in sorted(agent_list):
+    for agent in sorted(new_agent_list):
         room = allocation[agent]
         price = prices[room]
         ass_room_list.append(room + 1)
@@ -110,7 +116,7 @@ def welfare_maximize(values, agent_list, room_list):
     success(allocation)
     return allocation
 
-
+# floor_list is the same as room_list
 def envy_free_prices(values, agent_list, room_list, allocation):
 
     prices = {}
@@ -121,12 +127,18 @@ def envy_free_prices(values, agent_list, room_list, allocation):
     rent = calculate_rent(values[0])
 
     prob = LpProblem("Envy_Freeness", LpMinimize)
+    warning(room_list)
+    warning(agent_list)
+    warning(allocation)
+    warning(values)
+    warning(rev_allocation)
 
-    for r in room_list:
+    for a in agent_list:
+        # warning(values[rev_allocation[a]][a])
         # lower limit could be negative as well
         # If it is 0 then it is not a maximin utility solution
-        price_variables[r] = LpVariable(
-            f"p_{r}", -1 * rent, values[rev_allocation[r]][r]
+        price_variables[a] = LpVariable(
+        f"p_{a}", -1 * rent, values[rev_allocation[a]][a]
         )
 
     # Objective is maximize minimum utility (or minimize negative of minimum utility)
@@ -134,7 +146,7 @@ def envy_free_prices(values, agent_list, room_list, allocation):
     prob += min_utility
 
     # Ensure prices sum to rent
-    prob += lpSum(price_variables[r] for r in room_list) == rent
+    prob += lpSum(price_variables[a] for a in agent_list) == rent
 
     # print(agent_list, values, allocation)
     # Ensure envy-free
@@ -169,8 +181,8 @@ def envy_free_prices(values, agent_list, room_list, allocation):
         failure("Problem solving the LP!\t" + LpStatus[prob.status])
         return None
 
-    for i in agent_list:
-        room = allocation[i]
+    for a in agent_list:
+        room = allocation[a]
         prices[room] = price_variables[room].value()
 
     return prices

@@ -51,7 +51,10 @@ def calculate_rent():
         }
         return jsonify(err_response)
 
-    rooms_list, renters_list, rents = ret_value
+    if API == HOSTEL_API:
+        floors_list, renters_list, rents = ret_value
+    else:
+        rooms_list, renters_list, rents = ret_value
 
     response = {
         "file_path": file_path,
@@ -60,7 +63,7 @@ def calculate_rent():
     }
 
     if API == HOSTEL_API:
-        response["floors"] = floor_list
+        response["floors"] = floors_list
     else:
         response["rooms"] = rooms_list
 

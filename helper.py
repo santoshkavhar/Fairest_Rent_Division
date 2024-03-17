@@ -44,6 +44,19 @@ def calculate_rent(first_row):
         rent += i
     return rent
 
+def generate_capacity_list(capacity_string, num_floors):
+    # Split the string by comma, converting them to integers
+    capacity_list = []
+    capacity_string = capacity_string.split(',')
+    capacity_list.extend(capacity_string)
+    capacity_list = [eval(i) for i in capacity_list]
+    if len(capacity_list) < num_floors:
+    # Add dummy values
+        capacity_list.extend([1]*num_floors)
+    print(capacity_list)
+    # Return a list of these capacity integers
+    return capacity_list
+
 
 def failure(input):
     print(bcolors.FAIL, input, bcolors.ENDC)

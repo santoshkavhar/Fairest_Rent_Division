@@ -5,7 +5,7 @@ from helper import *
 from constants import *
 
 
-def maximin_utility(file_path):
+def maximin_utility(file_path, capacity):
 
     help("Finding utility for file: " + file_path)
 
@@ -32,7 +32,7 @@ def maximin_utility(file_path):
     warning(values)
     warning(agent_list)
     warning(room_list)
-    allocation = welfare_maximize(values, agent_list, room_list)
+    allocation = welfare_maximize(values, agent_list, room_list, capacity)
     print("Allocation")
     success(allocation)
     if allocation is None:
@@ -71,7 +71,7 @@ def maximin_utility(file_path):
     return ass_room_list, ass_renters_list, ass_rents_list
 
 
-def welfare_maximize(values, agent_list, room_list):
+def welfare_maximize(values, agent_list, room_list, capacity):
 
     allocation = {}
     variables = {}
@@ -96,7 +96,8 @@ def welfare_maximize(values, agent_list, room_list):
     # Each room assigned 1 agent
     # For floor assigned capacity agents for that floor
     for r in room_list:
-        prob += lpSum(variables[a][r] for a in agent_list) <= 1
+        # Default capacity is 1
+        prob += lpSum(variables[a][r] for a in agent_list) <= capacity[r]
 
     try:
         print(prob)

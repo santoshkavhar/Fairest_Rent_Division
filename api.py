@@ -23,14 +23,17 @@ def calculate_rent():
     num_renters = data.get("renters", 0)
     num_rooms = data.get("rooms", 0)
     num_floors = data.get("floors", 0)
-    # TODO: Add capacity
-    # capacity = data.get("capacity",0)
+    # capacity is in string form e.g. capacity="2,3,4"
+    capacity_string = data.get("capacity","")
     rent_data = data.get("rentData", [[]])
-
+    success(type(capacity_string))
     if num_rooms == 0:
         API = HOSTEL_API
+        capacity = generate_capacity_list(capacity_string, num_floors)
     else:
         API = ROOM_API
+        # Default capacity = 1,1,1...
+        capacity = [1]*num_rooms
 
     # print(num_rooms, num_renters, rent_data)
     renters_list = list(range(1, num_renters + 1))
@@ -42,7 +45,7 @@ def calculate_rent():
 
     # Rent data is already in matrix format
     file_path = generate_csv(rent_data)
-    ret_value = maximin_utility(file_path)
+    ret_value = maximin_utility(file_path, capacity)
 
     if ret_value is None:
         err_response = {

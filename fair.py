@@ -174,7 +174,7 @@ def envy_free_prices(values, agent_list, room_list, allocation):
         prob += min_utility >= values[a][allocation[a]] - price_variables[allocation[a]]
 
     try:
-        # print(prob)
+        print(prob)
         prob.solve(PULP_CBC_CMD(msg=False))
     except:
         failure("Error occured! Couldn't solve the LP problem!")

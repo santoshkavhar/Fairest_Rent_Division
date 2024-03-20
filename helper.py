@@ -32,7 +32,7 @@ def read_preference_csv(file_path):
     with open(file_path, "r") as csvfile:
         csv_reader = csv.reader(csvfile)
         for row in csv_reader:
-            matrix.append([int(value) for value in row])
+            matrix.append([float(value) for value in row])
     return matrix
 
 
@@ -57,6 +57,32 @@ def generate_capacity_list(capacity_string, num_floors):
     # Return a list of these capacity integers
     return capacity_list
 
+def normalized_rent_data(rent_data, capacity, rent):
+    normalized_rent_data = rent_data.copy()  # Making a copy to avoid modifying original data
+    for i in range(len(rent_data)):
+        total_capacity = sum(rent_data[i][j] * capacity[j] for j in range(len(rent_data[i])))
+        print("total capacity")
+        warning(total_capacity)
+
+        normalize_x = rent / total_capacity
+        print("normalize_x")
+        warning(normalize_x)
+
+        for j in range(len(rent_data[i])):
+            # Formula includes capacity as well
+            normalized_rent_data[i][j] = rent_data[i][j] * capacity[j] * normalize_x
+    print("Norm values: ", normalized_rent_data)
+    return normalized_rent_data
+
+def normalize_final_rent(rents, rent):
+    warning("rents")
+    warning(rents)
+    normalized_rent_data = rents.copy() # Making a copy
+    total_sum = sum(rents)
+    for i in range(len(rents)):
+        # print("Normal", i)
+        normalized_rent_data[i] = rents[i] * rent / total_sum
+    return normalized_rent_data
 
 def failure(input):
     print(bcolors.FAIL, input, bcolors.ENDC)

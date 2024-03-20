@@ -26,10 +26,16 @@ def calculate_rent():
     # capacity is in string form e.g. capacity="2,3,4"
     capacity_string = data.get("capacity","")
     rent_data = data.get("rentData", [[]])
+    rent = data.get("rent", 0)
+
     success(type(capacity_string))
+    success(rent_data)
+
     if num_rooms == 0:
         API = HOSTEL_API
         capacity = generate_capacity_list(capacity_string, num_floors)
+        # Normalized rent data
+        rent_data = normalized_rent_data(rent_data, capacity, rent)
     else:
         API = ROOM_API
         # Default capacity = 1,1,1...
@@ -37,10 +43,10 @@ def calculate_rent():
 
     # print(num_rooms, num_renters, rent_data)
     renters_list = list(range(1, num_renters + 1))
-    if API == HOSTEL_API:
-        floor_list = list(range(1, num_floors + 1))
-    else:
-        rooms_list = list(range(1, num_rooms + 1))
+    # if API == HOSTEL_API:
+    #     floors_list = list(range(1, num_floors + 1))
+    # else:
+    #     rooms_list = list(range(1, num_rooms + 1))
 
 
     # Rent data is already in matrix format
@@ -59,10 +65,13 @@ def calculate_rent():
     else:
         rooms_list, renters_list, rents = ret_value
 
+    rents = normalize_final_rent(rents, rent)
+
     response = {
         "file_path": file_path,
         "renters": renters_list,
         "rents": rents,
+        "normalized_rent_data": rent_data,
     }
 
     if API == HOSTEL_API:

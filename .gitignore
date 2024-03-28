@@ -1,5 +1,6 @@
 .DS_Store
 Inputs/*
 CSV_Input/*
+CSV_Input_Hostel/*
 __pycache__
 Test*

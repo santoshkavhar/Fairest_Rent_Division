@@ -81,10 +81,10 @@ def calculate_rent():
         for item in floors_name_list:
             floor_names_dict[counter] = item
             counter += 1
+
+        # Convert floor with numbers to floors with names
         for item in floors_list:
             floor_with_names.append(floor_names_dict[item])
-        # Normalize only if it is hostel API
-        rents = normalize_final_rent(rents, rent)
     else:
         rooms_list, renters_list, rents = ret_value
 

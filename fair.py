@@ -13,7 +13,7 @@ def maximin_utility(file_path, capacity, API):
     ass_room_list = []
     ass_rents_list = []
 
-    values = read_preference_csv(file_path, API)
+    values, rent = read_preference_csv(file_path, API)
 
     # Assumption: agent list and room list are a same set
     # [[2, 0], [1, 1], [2, 0]]  means 3 agents and 2 rooms or floors
@@ -21,7 +21,6 @@ def maximin_utility(file_path, capacity, API):
     room_list = list(range(0, len(values[0])))
 
     # failure(agent_list)
-
     
     if API == ROOM_API and not validate_values(values):
         failure(
@@ -63,6 +62,10 @@ def maximin_utility(file_path, capacity, API):
         ass_rents_list.append(price)
         success(f"{agent+1} {room+1} {price}")
 
+
+    # Normalize only if it is hostel API
+    if API == HOSTEL_API:
+        ass_rents_list = normalize_final_rent(ass_rents_list, rent)
     # Testing done here itself
     test_for_envy(ass_room_list, ass_renters_list, ass_rents_list, allocation, values)
 

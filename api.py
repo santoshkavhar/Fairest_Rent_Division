@@ -23,29 +23,33 @@ def calculate_rent():
     num_renters = data.get("renters", 0)
     num_rooms = data.get("rooms", 0)
     num_floors = data.get("floors", 0)
-    # capacity is in string form e.g. capacity="2,3,4"
-    capacity_string = data.get("capacity","")
-    rent_data = data.get("rentData", [[]])
+    # capacity_string = data.get("capacity","")
+    complete_rent_data = data.get("rentData", [[]])
     rent = data.get("rent", 0)
 
     floor_names_dict = {}
     floor_with_names = []
+    rent_data = []
 
-    success(type(capacity_string))
-    success(rent_data)
+    # success(type(capacity_string))
+    success(complete_rent_data)
 
     if num_rooms == 0:
         API = HOSTEL_API
-        capacity = generate_capacity_list(capacity_string, num_floors)
 
-        # TODO: get floor names from rent_data
-        floors_name_list = rent_data[0]
+        # capacity = generate_capacity_list(capacity_string, num_floors)
+    
+        # capacity is in string form e.g. capacity="2" ,"3" ,"4"
+        # Convert to int list format
+        capacity = [eval(i) for i in complete_rent_data[0]] 
+
+        floors_name_list = complete_rent_data[1]
         warning(floors_name_list)
 
-        # Pop the floor names
-        rent_data.pop(0)
+        # Pop the capacity, floor names
+        rent_data = convert_list_of_list_of_strings_to_int(complete_rent_data[2:])
+
         # Normalized rent data
-        rent_data = convert_list_of_list_of_strings_to_int(rent_data)
         rent_data = normalized_rent_data(rent_data, capacity, rent)
     else:
         API = ROOM_API
@@ -61,7 +65,7 @@ def calculate_rent():
 
 
     # Rent data is already in matrix format
-    file_path = generate_csv(rent_data, API)
+    file_path = generate_csv(complete_rent_data, API)
     ret_value = maximin_utility(file_path, capacity, API)
 
     if ret_value is None:
@@ -79,10 +83,11 @@ def calculate_rent():
             counter += 1
         for item in floors_list:
             floor_with_names.append(floor_names_dict[item])
+        # Normalize only if it is hostel API
+        rents = normalize_final_rent(rents, rent)
     else:
         rooms_list, renters_list, rents = ret_value
 
-    rents = normalize_final_rent(rents, rent)
 
     response = {
         "file_path": file_path,

@@ -28,13 +28,24 @@ def calculate_rent():
     rent_data = data.get("rentData", [[]])
     rent = data.get("rent", 0)
 
+    floor_names_dict = {}
+    floor_with_names = []
+
     success(type(capacity_string))
     success(rent_data)
 
     if num_rooms == 0:
         API = HOSTEL_API
         capacity = generate_capacity_list(capacity_string, num_floors)
+
+        # TODO: get floor names from rent_data
+        floors_name_list = rent_data[0]
+        warning(floors_name_list)
+
+        # Pop the floor names
+        rent_data.pop(0)
         # Normalized rent data
+        rent_data = convert_list_of_list_of_strings_to_int(rent_data)
         rent_data = normalized_rent_data(rent_data, capacity, rent)
     else:
         API = ROOM_API
@@ -50,8 +61,8 @@ def calculate_rent():
 
 
     # Rent data is already in matrix format
-    file_path = generate_csv(rent_data)
-    ret_value = maximin_utility(file_path, capacity)
+    file_path = generate_csv(rent_data, API)
+    ret_value = maximin_utility(file_path, capacity, API)
 
     if ret_value is None:
         err_response = {
@@ -62,6 +73,12 @@ def calculate_rent():
 
     if API == HOSTEL_API:
         floors_list, renters_list, rents = ret_value
+        counter=1
+        for item in floors_name_list:
+            floor_names_dict[counter] = item
+            counter += 1
+        for item in floors_list:
+            floor_with_names.append(floor_names_dict[item])
     else:
         rooms_list, renters_list, rents = ret_value
 
@@ -75,7 +92,7 @@ def calculate_rent():
     }
 
     if API == HOSTEL_API:
-        response["floors"] = floors_list
+        response["floors"] = floor_with_names
     else:
         response["rooms"] = rooms_list
 

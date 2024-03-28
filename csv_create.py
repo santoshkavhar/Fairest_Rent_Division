@@ -8,14 +8,14 @@ from constants import *
 from helper import *
 
 
-def create_csv_files(num_files, folder_name):
+def create_csv_files(num_files, folder_name, API):
 
     # Create the folder if it doesn't exist
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
     for i in range(num_files):
-        generate_csv(folder_name)
+        generate_csv(folder_name, API)
 
 
 def correct_matrix(matrix, rent):
@@ -36,22 +36,22 @@ def correct_matrix(matrix, rent):
     return matrix
 
 
-def generate_csv(matrix_or_folder):
+def generate_csv(matrix_or_folder, API):
 
     if matrix_or_folder is None:
-        return generate_random_csv(MIN_RENT, MAX_RENT, MIN_ROWS, MAX_ROWS)
+        return generate_random_csv(MIN_RENT, MAX_RENT, MIN_ROWS, MAX_ROWS, API)
 
     # Check if parameter is a string i.e a folder name
     elif type(matrix_or_folder) == str:
         folder_name = matrix_or_folder
-        return generate_random_csv(MIN_RENT, MAX_RENT, MIN_ROWS, MAX_ROWS, folder_name)
+        return generate_random_csv(MIN_RENT, MAX_RENT, MIN_ROWS, MAX_ROWS, folder_name, API)
 
     else:
         matrix = matrix_or_folder
-        return generate_csv_from_matrix(matrix, None)
+        return generate_csv_from_matrix(matrix, None, API)
 
 
-def generate_random_csv(min_rent, max_rent, min_rows, max_rows, folder_name):
+def generate_random_csv(min_rent, max_rent, min_rows, max_rows, folder_name, API):
 
     # Change the value of n as needed
     # n = 5 For a 5x5 matrix
@@ -77,7 +77,7 @@ def generate_random_csv(min_rent, max_rent, min_rows, max_rows, folder_name):
     return generate_csv_from_matrix(matrix, folder_name)
 
 
-def generate_csv_from_matrix(matrix, folder_name):
+def generate_csv_from_matrix(matrix, folder_name, API):
 
     # Get default folder
     f_n = CSV_Input

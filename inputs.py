@@ -2,8 +2,9 @@ from helper import *
 from fair import *
 from csv_create import *
 
+capacity = [1] * 100
 
-def terminal_mode():
+def terminal_mode(API):
 
     nodes = get_input_nodes()
     wt = get_input_weights(nodes)
@@ -11,7 +12,7 @@ def terminal_mode():
     # wt is dictionary of dictionaries, we need to convert it
     matrix = convert_to_matrix(wt)
     file_path = generate_csv(matrix)
-    maximin_utility(file_path)
+    maximin_utility(file_path, capacity, API)
 
 
 def get_input_nodes():

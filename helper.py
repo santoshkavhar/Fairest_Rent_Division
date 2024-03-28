@@ -84,6 +84,16 @@ def normalize_final_rent(rents, rent):
         normalized_rent_data[i] = rents[i] * rent / total_sum
     return normalized_rent_data
 
+
+def convert_list_of_list_of_strings_to_int(list_of_list_of_strings):
+  result = []
+  for sublist in list_of_list_of_strings:
+    inner_result = []
+    for string in sublist:
+      inner_result.append(int(string))
+    result.append(inner_result)
+  return result
+
 def failure(input):
     print(bcolors.FAIL, input, bcolors.ENDC)
 

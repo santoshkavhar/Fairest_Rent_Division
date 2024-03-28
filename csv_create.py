@@ -48,7 +48,7 @@ def generate_csv(matrix_or_folder, API):
 
     else:
         matrix = matrix_or_folder
-        return generate_csv_from_matrix(matrix, None, API)
+        return generate_csv_from_matrix(matrix, None)
 
 
 def generate_random_csv(min_rent, max_rent, min_rows, max_rows, folder_name, API):
@@ -77,7 +77,7 @@ def generate_random_csv(min_rent, max_rent, min_rows, max_rows, folder_name, API
     return generate_csv_from_matrix(matrix, folder_name)
 
 
-def generate_csv_from_matrix(matrix, folder_name, API):
+def generate_csv_from_matrix(matrix, folder_name):
 
     # Get default folder
     f_n = CSV_Input

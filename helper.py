@@ -24,13 +24,17 @@ def check_matrix(matrix):
         print(sum)
 
 
-def read_preference_csv(file_path):
+def read_preference_csv(file_path, API):
 
     matrix = []
 
     # Read CSV data from the file into the list of lists
     with open(file_path, "r") as csvfile:
         csv_reader = csv.reader(csvfile)
+        if API == HOSTEL_API:
+        # Skip first 2 rows
+            next(csv_reader)
+            next(csv_reader)
         for row in csv_reader:
             matrix.append([float(value) for value in row])
     return matrix

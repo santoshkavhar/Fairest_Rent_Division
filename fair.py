@@ -13,7 +13,7 @@ def maximin_utility(file_path, capacity, API):
     ass_room_list = []
     ass_rents_list = []
 
-    values = read_preference_csv(file_path)
+    values = read_preference_csv(file_path, API)
 
     # Assumption: agent list and room list are a same set
     # [[2, 0], [1, 1], [2, 0]]  means 3 agents and 2 rooms or floors

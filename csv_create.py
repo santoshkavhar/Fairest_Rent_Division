@@ -104,3 +104,36 @@ def generate_csv_from_matrix(matrix, folder_name):
         for row in matrix:
             writer.writerow(row)
     return file_path
+
+
+def generate_csv_for_hostel(rent, capacity, floor_names, renters_floors, folder_name):
+    # Get default folder
+    f_n = CSV_Input_Hostel
+
+    # Check if data is to be created inside given folder
+    if folder_name is not None:
+        f_n = folder_name
+
+    # Write the matrix to a CSV file
+    file_name = (
+        "in_"
+        + str(time.time())
+        + "_"
+        + "".join(random.choices(string.ascii_lowercase, k=6))
+        + ".csv"
+    )
+    file_path = os.path.join(f_n, file_name)
+
+    # Create directory if not already exist
+    os.makedirs(f_n, exist_ok=True)
+
+    with open(file_path, "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+
+        # Write rent
+        writer.writerow([rent])
+        writer.writerow(capacity)
+        writer.writerow(floor_names)
+        for row in renters_floors:
+            writer.writerow(row)
+    return file_path

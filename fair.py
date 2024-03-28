@@ -5,7 +5,7 @@ from helper import *
 from constants import *
 
 
-def maximin_utility(file_path, capacity):
+def maximin_utility(file_path, capacity, API):
 
     help("Finding utility for file: " + file_path)
 
@@ -22,7 +22,8 @@ def maximin_utility(file_path, capacity):
 
     # failure(agent_list)
 
-    if not validate_values(values):
+    
+    if API == ROOM_API and not validate_values(values):
         failure(
             "Error in Validation! Check for equal sum of each row and negative values."
         )

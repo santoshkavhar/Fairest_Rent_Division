@@ -13,9 +13,12 @@ def create_csv_files(num_files, folder_name, API):
     # Create the folder if it doesn't exist
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
-
-    for i in range(num_files):
-        generate_csv(folder_name, API)
+    if API == ROOM_API:
+        for i in range(num_files):
+            generate_csv(folder_name, API)
+    else:
+        for i in range(num_files):
+            generate_random_csv_for_hostel(folder_name)
 
 
 def correct_matrix(matrix, rent):
@@ -74,6 +77,8 @@ def generate_random_csv(min_rent, max_rent, min_rows, max_rows, folder_name, API
     matrix = correct_matrix(matrix, rent)
 
     # print(matrix)
+    if API== HOSTEL_API:
+        return matrix, folder_name
     return generate_csv_from_matrix(matrix, folder_name)
 
 
@@ -137,4 +142,23 @@ def generate_csv_for_hostel(rent, capacity, floor_names, renters_floors, folder_
         writer.writerow(floor_names)
         for row in renters_floors:
             writer.writerow(row)
+    help(file_path)
     return file_path
+
+
+def generate_random_csv_for_hostel(folder_name):
+
+    rent = random.randint(MIN_RENT, MAX_RENT)
+    num_floors = random.randint(MIN_FLOORS, MAX_FLOORS)
+    floor_names = get_floor_names(num_floors)
+    capacity = np.random.randint(0, MAX_CAPACITY + 1, size=(num_floors))
+    
+    renters_floors, _ = generate_random_csv(MIN_RENT, MAX_RENT, num_floors, num_floors, folder_name, HOSTEL_API)
+    generate_csv_for_hostel(rent, capacity, floor_names, renters_floors, folder_name)
+
+
+def get_floor_names(num_floors):
+    floor_names = []
+    for i in range(num_floors):
+        floor_names.append("floor" + str(i+1))
+    return floor_names

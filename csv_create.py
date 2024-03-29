@@ -131,6 +131,7 @@ def generate_csv_for_hostel(rent, capacity, floor_names, renters_floors, folder_
         writer = csv.writer(csvfile)
 
         # Write rent
+        # help("Writing")
         writer.writerow([rent])
         writer.writerow(capacity)
         writer.writerow(floor_names)

@@ -22,7 +22,7 @@ def calculate_rent():
 
     num_renters = data.get("renters", 0)
     num_rooms = data.get("rooms", 0)
-    num_floors = data.get("floors", 0)
+    # num_floors = data.get("floors", 0)
     # capacity_string = data.get("capacity","")
     complete_rent_data = data.get("rentData", [[]])
     rent = data.get("rent", 0)
@@ -65,7 +65,11 @@ def calculate_rent():
 
 
     # Rent data is already in matrix format
-    file_path = generate_csv(complete_rent_data, API)
+    if API == HOSTEL_API:
+        # generate CSV is different for hostel api
+        file_path = generate_csv_for_hostel(rent, capacity, floors_name_list, rent_data, CSV_Input_Hostel)
+    else:
+        file_path = generate_csv(complete_rent_data, API)
     ret_value = maximin_utility(file_path, capacity, API)
 
     if ret_value is None:

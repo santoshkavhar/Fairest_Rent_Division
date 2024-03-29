@@ -32,6 +32,9 @@ python3 app.py -create <num_of_files_to_be_created> <folder_name>
 ## Test CSV files for rent data
 python3 app.py -test <folder_name>
 
+## For hostel mode use hostel flag
+python3 app.py -terminal -hostel
+
 # NOTE:
 Please start folder_name for creation of CSV files to be something like Test*, where * can be any string.
 

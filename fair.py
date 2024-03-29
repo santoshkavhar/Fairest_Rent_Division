@@ -32,6 +32,10 @@ def maximin_utility(file_path, API):
     warning(values)
     warning(agent_list)
     warning(room_list)
+
+    # Handle capacity
+    if API == ROOM_API:
+        capacity = [1] * 100
     allocation = welfare_maximize(values, agent_list, room_list, capacity)
     print("Allocation")
     success(allocation)

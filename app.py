@@ -47,7 +47,7 @@ if __name__ == "__main__":
     if args.terminal:
         terminal_mode(API)
     elif args.file:
-        maximin_utility(args.file, capacity, API)
+        maximin_utility(args.file, API)
     elif args.create:
         create_csv_files(args.create, args.folder_name, API)
     elif args.test:

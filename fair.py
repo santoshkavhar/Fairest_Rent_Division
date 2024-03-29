@@ -5,7 +5,7 @@ from helper import *
 from constants import *
 
 
-def maximin_utility(file_path, capacity, API):
+def maximin_utility(file_path, API):
 
     help("Finding utility for file: " + file_path)
 
@@ -13,7 +13,7 @@ def maximin_utility(file_path, capacity, API):
     ass_room_list = []
     ass_rents_list = []
 
-    values, rent = read_preference_csv(file_path, API)
+    values, rent, capacity = read_preference_csv(file_path, API)
 
     # Assumption: agent list and room list are a same set
     # [[2, 0], [1, 1], [2, 0]]  means 3 agents and 2 rooms or floors

@@ -70,7 +70,7 @@ def calculate_rent():
         file_path = generate_csv_for_hostel(rent, capacity, floors_name_list, rent_data, CSV_Input_Hostel)
     else:
         file_path = generate_csv(complete_rent_data, API)
-    ret_value = maximin_utility(file_path, capacity, API)
+    ret_value = maximin_utility(file_path, API)
 
     if ret_value is None:
         err_response = {

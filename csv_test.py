@@ -2,7 +2,7 @@ import os
 from helper import *
 from fair import *
 
-capacity = [1]*100
+# capacity = [1]*100
 
 def test_csv_files(folder_name, API):
 
@@ -16,4 +16,4 @@ def test_csv_files(folder_name, API):
     for file in files:
         file_path = os.path.join(folder_name, file)
         help(f"Testing file: " + file_path)
-        maximin_utility(file_path, capacity, API)
+        maximin_utility(file_path, API)

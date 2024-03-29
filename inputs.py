@@ -2,7 +2,7 @@ from helper import *
 from fair import *
 from csv_create import *
 
-capacity = [1] * 100
+# capacity = [1] * 100
 
 def terminal_mode(API):
 
@@ -14,7 +14,7 @@ def terminal_mode(API):
         file_path = generate_csv_for_hostel(rent, capacity, floor_names, renters_floors, CSV_Input_Hostel)
     # For hostel_api the csv is of different format
 
-    maximin_utility(file_path, capacity, API)
+    maximin_utility(file_path, API)
 
 
 def get_matrix_for_room():

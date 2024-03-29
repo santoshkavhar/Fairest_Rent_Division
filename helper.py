@@ -44,8 +44,8 @@ def read_preference_csv(file_path, API):
     if API == HOSTEL_API:
         # Normalize only if it is HOSTEL_API
         rent_data = normalized_rent_data(matrix, capacity, int(rent[0]))
-        return rent_data, int(rent[0])
-    return matrix, None
+        return rent_data, int(rent[0]), capacity
+    return matrix, None, None
 
 
 def calculate_rent(first_row):

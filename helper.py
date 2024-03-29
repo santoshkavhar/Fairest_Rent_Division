@@ -34,13 +34,18 @@ def read_preference_csv(file_path, API):
         if API == HOSTEL_API:
         # Skip first 3 rows of rent, capacity and floor names
             rent = next(csv_reader)
-            next(csv_reader)
+            capacity_string = next(csv_reader)
+            # warning(capacity_string)
+            capacity = [eval(i) for i in capacity_string]
             next(csv_reader)
         for row in csv_reader:
             matrix.append([float(value) for value in row])
+
     if API == HOSTEL_API:
-        return matrix, int(rent[0])
-    return matrix
+        # Normalize only if it is HOSTEL_API
+        rent_data = normalized_rent_data(matrix, capacity, int(rent[0]))
+        return rent_data, int(rent[0])
+    return matrix, None
 
 
 def calculate_rent(first_row):

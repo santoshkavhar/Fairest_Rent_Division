@@ -14,7 +14,7 @@ def terminal_mode(API):
         file_path = generate_csv_for_hostel(rent, capacity, floor_names, renters_floors, CSV_Input_Hostel)
     # For hostel_api the csv is of different format
 
-    maximin_utility(file_path, API)
+    maximin_utility(file_path, API, False)
 
 
 def get_matrix_for_room():

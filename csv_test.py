@@ -16,4 +16,4 @@ def test_csv_files(folder_name, API):
     for file in files:
         file_path = os.path.join(folder_name, file)
         help(f"Testing file: " + file_path)
-        maximin_utility(file_path, API)
+        maximin_utility(file_path, API, False)

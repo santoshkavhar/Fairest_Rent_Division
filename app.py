@@ -47,7 +47,8 @@ if __name__ == "__main__":
     if args.terminal:
         terminal_mode(API)
     elif args.file:
-        maximin_utility(args.file, API)
+        # file_path = normalize_final_rent_from_file(args.file)
+        maximin_utility(args.file, API, False)
     elif args.create:
         create_csv_files(args.create, args.folder_name, API)
     elif args.test:

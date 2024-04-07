@@ -24,7 +24,7 @@ def check_matrix(matrix):
         print(sum)
 
 
-def read_preference_csv(file_path, API):
+def read_preference_csv(file_path, API, normalized):
 
     matrix = []
 
@@ -43,8 +43,9 @@ def read_preference_csv(file_path, API):
 
     if API == HOSTEL_API:
         # Normalize only if it is HOSTEL_API
-        rent_data = normalized_rent_data(matrix, capacity, int(rent[0]))
-        return rent_data, int(rent[0]), capacity
+        if not normalized:
+            matrix = normalized_rent_data(matrix, capacity, int(rent[0]))
+        return matrix, int(rent[0]), capacity
     return matrix, None, None
 
 

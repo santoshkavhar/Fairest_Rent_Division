@@ -5,7 +5,7 @@ from helper import *
 from constants import *
 
 
-def maximin_utility(file_path, API):
+def maximin_utility(file_path, API, normalised):
 
     help("Finding utility for file: " + file_path)
 
@@ -13,7 +13,7 @@ def maximin_utility(file_path, API):
     ass_room_list = []
     ass_rents_list = []
 
-    values, rent, capacity = read_preference_csv(file_path, API)
+    values, rent, capacity = read_preference_csv(file_path, API, normalised)
 
     # Assumption: agent list and room list are a same set
     # [[2, 0], [1, 1], [2, 0]]  means 3 agents and 2 rooms or floors
@@ -29,6 +29,7 @@ def maximin_utility(file_path, API):
         return None
 
     # First, find a welfare-maximizing allocation
+    print("Values  in maximin utility")
     warning(values)
     warning(agent_list)
     warning(room_list)
@@ -142,6 +143,7 @@ def envy_free_prices(values, agent_list, room_list, allocation):
     warning(room_list)
     warning(agent_list)
     warning(allocation)
+    warning("values")
     warning(values)
     warning(rev_allocation)
 
@@ -182,7 +184,8 @@ def envy_free_prices(values, agent_list, room_list, allocation):
         prob += min_utility >= values[a][allocation[a]] - price_variables[allocation[a]]
 
     try:
-        print(prob)
+        print("prob_envy_free")
+        success(prob)
         prob.solve(PULP_CBC_CMD(msg=False))
     except:
         failure("Error occured! Couldn't solve the LP problem!")

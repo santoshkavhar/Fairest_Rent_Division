@@ -7,7 +7,10 @@ from inputs import *
 from constants import *
 
 app = Flask(__name__)
-cors = CORS(app)
+#cors = CORS(app)
+cors = CORS(app, resources={r"/*": {
+    "origins": "*",
+}})
 app.config["CORS_HEADERS"] = "Content-Type"
 
 # Default API is Room
@@ -15,7 +18,7 @@ API = ROOM_API
 # Hostel Feature API is only through UI for now
 
 @app.route("/rent", methods=["GET", "POST"])
-@cross_origin()
+#@cross_origin()
 def calculate_rent():
 
     data = request.get_json()
